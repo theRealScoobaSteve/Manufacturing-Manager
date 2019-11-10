@@ -1,0 +1,27 @@
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.GridPane?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<GridPane fx:controller="sample.Controller"
+          xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="10" vgap="10"
+            gridLinesVisible="true">
+    <Label text="Parts" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+    <Button text="Search" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+    <Label text="Part ID" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+    <Label text="Part Name" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+    <Label text="Inventory Level" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+    <Label text="Price/Cost per Unit" GridPane.rowIndex="1" GridPane.columnIndex="3"/>
+    <Button text="Add" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+    <Button text="Modify" GridPane.rowIndex="2" GridPane.columnIndex="2"/>
+    <Button text="Delete" GridPane.rowIndex="2" GridPane.columnIndex="3"/>
+    <Label text="Products" GridPane.rowIndex="0" GridPane.columnIndex="7"/>
+    <Button text="Search" GridPane.rowIndex="0" GridPane.columnIndex="8"/>
+    <Label text="Product ID" GridPane.rowIndex="1" GridPane.columnIndex="7"/>
+    <Label text="Product Name" GridPane.rowIndex="1" GridPane.columnIndex="8"/>
+    <Label text="Inventory Level" GridPane.rowIndex="1" GridPane.columnIndex="9"/>
+    <Label text="Price Per Unit" GridPane.rowIndex="1" GridPane.columnIndex="10"/>
+    <Button text="Add" GridPane.rowIndex="2" GridPane.columnIndex="8"/>
+    <Button text="Modify" GridPane.rowIndex="2" GridPane.columnIndex="9"/>
+    <Button text="Delete" GridPane.rowIndex="2" GridPane.columnIndex="10"/>
+</GridPane>
