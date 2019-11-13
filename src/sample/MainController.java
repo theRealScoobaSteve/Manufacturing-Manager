@@ -11,7 +11,7 @@ public class MainController {
         try {
             Stage stage = new Stage();
             FXMLLoader loader = new FXMLLoader();
-
+            
             Pane root = loader.load(getClass().getResource("AddPart.fxml"));
             stage.setScene(new Scene(root));
             stage.showAndWait();
