@@ -151,7 +151,7 @@
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <TextField>
+            <TextField text="Min">
                <HBox.margin>
                   <Insets left="20.0" />
                </HBox.margin>
