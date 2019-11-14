@@ -1,5 +1,6 @@
 package sample;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.util.Iterator;
@@ -7,6 +8,12 @@ import java.util.Iterator;
 public class InventoryModel {
     private ObservableList<Part> allParts;
     private ObservableList<Product> allProducts;
+    private static InventoryModel instance;
+
+    public InventoryModel() {
+        this.allParts = FXCollections.observableArrayList();
+        this.allParts = FXCollections.observableArrayList();
+    }
 
     public InventoryModel addPart(Part part) {
         allParts.add(part);
@@ -100,5 +107,21 @@ public class InventoryModel {
 
     public ObservableList<Product> getAllProducts() {
         return allProducts;
+    }
+
+    public int generatePartId() {
+        return this.allParts.size() + 1;
+    }
+
+    public int generateProductId() {
+        return this.allProducts.size() + 1;
+    }
+
+    public static InventoryModel getInstance() {
+        if(instance ==  null) {
+            instance = new InventoryModel();
+        }
+
+        return instance;
     }
 }

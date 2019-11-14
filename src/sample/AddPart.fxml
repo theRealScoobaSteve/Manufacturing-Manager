@@ -37,7 +37,7 @@
                   <Insets left="25.0" top="45.0" />
                </HBox.margin>
             </Label>
-            <CheckBox mnemonicParsing="false" text="In-House">
+            <CheckBox fx:id="inHouse" mnemonicParsing="false" selected="true" text="In-House">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>
@@ -47,7 +47,7 @@
          </children></HBox>
       <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="0">
          <children>
-            <CheckBox mnemonicParsing="false" text="Outsourced">
+            <CheckBox fx:id="outSourced" mnemonicParsing="false" text="Outsourced">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>
@@ -66,7 +66,7 @@
                   <Insets left="125.0" />
                </HBox.margin>
             </Label>
-            <TextField text="Auto Gen - Disabled">
+            <TextField disable="true" text="Auto Gen - Disabled">
                <HBox.margin>
                   <Insets left="130.0" />
                </HBox.margin>
@@ -104,7 +104,7 @@
                   <Insets left="125.0" />
                </padding>
             </Label>
-            <TextField text="Inventory Level">
+            <TextField disable="true" text="Inventory Level">
                <HBox.margin>
                   <Insets left="120.0" />
                </HBox.margin></TextField>
@@ -159,7 +159,7 @@
          </children></HBox>
       <HBox alignment="CENTER_LEFT" minHeight="60.0" prefHeight="60.0" prefWidth="200.0" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="6">
          <children>
-            <Label text="Company Name">
+            <Label text="Machine Id">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
@@ -170,7 +170,7 @@
                   <Insets left="125.0" />
                </padding>
             </Label>
-            <TextField text="Company Name" fx:id="companyName">
+            <TextField fx:id="machineId" text="Machine ID">
                <HBox.margin>
                   <Insets left="10.0" />
                </HBox.margin>
@@ -178,12 +178,12 @@
          </children></HBox>
       <HBox alignment="CENTER_RIGHT" minHeight="60.0" prefHeight="60.0" prefWidth="200.0" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="7">
          <children>
-            <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="75.0" text="Save">
+            <Button mnemonicParsing="false" onAction="#addPart" prefHeight="30.0" prefWidth="75.0" text="Save" fx:id="saveButton">
                <HBox.margin>
                   <Insets right="40.0" />
                </HBox.margin>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="75.0" text="Cancel">
+            <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="75.0" text="Cancel" onAction="#exitWindow">
                <HBox.margin>
                   <Insets right="50.0" />
                </HBox.margin></Button>
