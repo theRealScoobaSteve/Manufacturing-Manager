@@ -37,7 +37,7 @@
                   <Insets left="25.0" top="45.0" />
                </HBox.margin>
             </Label>
-            <CheckBox fx:id="inHouse" mnemonicParsing="false" selected="true" text="In-House">
+            <CheckBox fx:id="inHouse" mnemonicParsing="false" onAction="#machineIdInput" selected="true" text="In-House">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>
@@ -47,7 +47,7 @@
          </children></HBox>
       <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="0">
          <children>
-            <CheckBox fx:id="outSourced" mnemonicParsing="false" text="Outsourced">
+            <CheckBox fx:id="outSourced" onAction="#companyNameInput" mnemonicParsing="false" text="Outsourced">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>
@@ -159,7 +159,7 @@
          </children></HBox>
       <HBox alignment="CENTER_LEFT" minHeight="60.0" prefHeight="60.0" prefWidth="200.0" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="6">
          <children>
-            <Label text="Machine Id">
+            <Label fx:id="partTypeLabel" text="Machine Id">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
@@ -170,7 +170,7 @@
                   <Insets left="125.0" />
                </padding>
             </Label>
-            <TextField fx:id="machineId" text="Machine ID">
+            <TextField fx:id="partType" text="Machine ID">
                <HBox.margin>
                   <Insets left="10.0" />
                </HBox.margin>

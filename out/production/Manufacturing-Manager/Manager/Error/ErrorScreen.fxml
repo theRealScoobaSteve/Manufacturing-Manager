@@ -12,7 +12,7 @@
    <bottom>
       <HBox alignment="BOTTOM_RIGHT" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <Button alignment="BOTTOM_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" text="Close">
+            <Button alignment="BOTTOM_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" text="Close" onAction="#close">
                <font>
                   <Font size="18.0" />
                </font>
