@@ -27,7 +27,7 @@ public class InventoryModel {
         return this;
     }
 
-    public Part lookupPart(int id) {
+    public Part lookupPart(int id) throws Exception {
         Iterator<Part> iterator = allParts.iterator();
 
         while(iterator.hasNext()) {
@@ -38,7 +38,7 @@ public class InventoryModel {
             }
         }
 
-        return null;
+        throw new Exception("Part with id: " + id + " does not exist");
     }
 
     public Part lookupPart(String partName) {
@@ -117,6 +117,14 @@ public class InventoryModel {
 
     public int generateProductId() {
         return this.allProducts.size() + 1;
+    }
+
+    public int getPartStock() {
+        return this.allParts.size();
+    }
+
+    public int getProductStock() {
+        return this.allProducts.size();
     }
 
     public static InventoryModel getInstance() {

@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<GridPane prefHeight="520.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
+<GridPane prefHeight="520.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Manager.Part.PartController">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -37,7 +37,14 @@
                         <Insets left="25.0" top="45.0" />
                     </HBox.margin>
                 </Label>
-                <CheckBox mnemonicParsing="false" text="Outsourced">
+                <CheckBox fx:id="inHouse" mnemonicParsing="false" disable="true" onAction="#machineIdInput" selected="true" text="In-House">
+                    <font>
+                        <Font name="System Bold" size="16.0" />
+                    </font>
+                    <HBox.margin>
+                        <Insets left="75.0" top="50.0" />
+                    </HBox.margin></CheckBox>
+                <CheckBox fx:id="outSourced" mnemonicParsing="false" onAction="#companyNameInput" text="Outsourced">
                     <font>
                         <Font name="System Bold" size="16.0" />
                     </font>
@@ -45,13 +52,7 @@
                         <Insets left="60.0" top="50.0" />
                     </HBox.margin>
                 </CheckBox>
-                <CheckBox mnemonicParsing="false" text="In-House">
-                    <font>
-                        <Font name="System Bold" size="16.0" />
-                    </font>
-                    <HBox.margin>
-                        <Insets left="75.0" top="50.0" />
-                    </HBox.margin></CheckBox>
+
             </children></HBox>
         <HBox alignment="CENTER_LEFT" maxHeight="60.0" minHeight="60.0" prefHeight="60.0" prefWidth="200.0" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="1">
             <children>
@@ -63,7 +64,7 @@
                         <Insets left="125.0" />
                     </HBox.margin>
                 </Label>
-                <TextField text="ID">
+                <TextField fx:id="id" text="ID">
                     <HBox.margin>
                         <Insets left="130.0" />
                     </HBox.margin>
@@ -82,7 +83,7 @@
                         <Insets left="125.0" />
                     </padding>
                 </Label>
-                <TextField text="Part Name">
+                <TextField fx:id="name" text="Part Name">
                     <HBox.margin>
                         <Insets left="95.0" />
                     </HBox.margin>
@@ -101,7 +102,7 @@
                         <Insets left="125.0" />
                     </padding>
                 </Label>
-                <TextField text="Inventory Level">
+                <TextField disable="true" text="Inventory Level">
                     <HBox.margin>
                         <Insets left="120.0" />
                     </HBox.margin></TextField>
@@ -116,7 +117,7 @@
                         <Insets left="125.0" />
                     </HBox.margin>
                 </Label>
-                <TextField text="Price/Cost">
+                <TextField fx:id="price" text="Price/Cost">
                     <HBox.margin>
                         <Insets left="60.0" />
                     </HBox.margin>
@@ -135,7 +136,7 @@
                         <Insets left="125.0" />
                     </padding>
                 </Label>
-                <TextField text="Max">
+                <TextField fx:id="max" text="Max">
                     <HBox.margin>
                         <Insets left="20.0" />
                     </HBox.margin>
@@ -148,7 +149,7 @@
                         <Font name="System Bold" size="18.0" />
                     </font>
                 </Label>
-                <TextField text="Min">
+                <TextField fx:id="min" text="Min">
                     <HBox.margin>
                         <Insets left="20.0" />
                     </HBox.margin>
@@ -156,7 +157,7 @@
             </children></HBox>
         <HBox alignment="CENTER_LEFT" minHeight="60.0" prefHeight="60.0" prefWidth="200.0" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="6">
             <children>
-                <Label text="Machine ID">
+                <Label fx:id="partTypeLabel" text="Machine Id">
                     <font>
                         <Font name="System Bold" size="18.0" />
                     </font>
@@ -167,20 +168,20 @@
                         <Insets left="125.0" />
                     </padding>
                 </Label>
-                <TextField text="Machine ID">
+                <TextField fx:id="partType" text="Machine ID">
                     <HBox.margin>
-                        <Insets left="50.0" />
+                        <Insets left="10.0" />
                     </HBox.margin>
                 </TextField>
             </children></HBox>
         <HBox alignment="CENTER_RIGHT" minHeight="60.0" prefHeight="60.0" prefWidth="200.0" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="7">
             <children>
-                <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="75.0" text="Save">
+                <Button onAction="#modifyPart"  mnemonicParsing="false" prefHeight="30.0" prefWidth="75.0" text="Save" fx:id="modifyButton">
                     <HBox.margin>
                         <Insets right="40.0" />
                     </HBox.margin>
                 </Button>
-                <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="75.0" text="Cancel">
+                <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="75.0" text="Cancel" onAction="#exitWindow">
                     <HBox.margin>
                         <Insets right="50.0" />
                     </HBox.margin></Button>

@@ -4,7 +4,6 @@ public abstract class Part {
     private int id;
     private String name;
     private double price;
-    private int stock;
     private int min;
     private int max;
 
@@ -12,7 +11,6 @@ public abstract class Part {
         this.id = id;
         this.name = name;
         this.price = price;
-        this.stock = 0;
         this.min = min;
         this.max = max;
     }
@@ -41,15 +39,6 @@ public abstract class Part {
 
     public Part setPrice(double price) {
         this.price = price;
-        return this;
-    }
-
-    public int getStock() {
-        return stock;
-    }
-
-    public Part setStock(int stock) {
-        this.stock = stock;
         return this;
     }
 

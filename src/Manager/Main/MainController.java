@@ -24,12 +24,12 @@ public class MainController extends AbstractController {
         try {
             Stage stage = new Stage();
             FXMLLoader loader = new FXMLLoader();
-
             Pane root = loader.load(getClass().getResource("../Part/ModifyPart.fxml").openStream());
             stage.setScene(new Scene(root));
+
             stage.showAndWait();
         } catch(Exception e) {
-            System.out.println(e.toString());
+            System.out.println(e.getMessage());
         }
     }
 
