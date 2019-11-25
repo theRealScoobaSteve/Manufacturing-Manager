@@ -6,13 +6,15 @@ public abstract class Part {
     private double price;
     private int min;
     private int max;
+    private int stock;
 
-    public Part(int id, String name, double price, int min, int max) {
+    public Part(int id, String name, double price, int min, int max, int stock) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.min = min;
         this.max = max;
+        this.stock = stock;
     }
 
     public int getId() {
@@ -57,6 +59,15 @@ public abstract class Part {
 
     public Part setMax(int max) {
         this.max = max;
+        return this;
+    }
+
+    public int getStock() {
+        return stock;
+    }
+
+    public Part setStock(int stock) {
+        this.stock = stock;
         return this;
     }
 }

@@ -8,8 +8,9 @@ public class Outsourced extends Part {
                       double price,
                       int min,
                       int max,
+                      int stock,
                       String companyName) {
-        super(id, name, price, min, max);
+        super(id, name, price, min, max, stock);
         this.companyName = companyName;
     }
 

@@ -30,6 +30,8 @@ public class PartController extends AbstractController {
     private Label partTypeLabel;
     @FXML
     private TextField id;
+    @FXML
+    private TextField inventory;
 
     private String partName;
 
@@ -44,6 +46,10 @@ public class PartController extends AbstractController {
     private String partCompanyName;
 
     private int partId;
+
+    private Part newPart;
+
+    private int partInventory;
 
     @FXML
     public void addPart() {
@@ -90,28 +96,7 @@ public class PartController extends AbstractController {
         return new Runnable() {
             @Override
             public void run() {
-                Part newPart;
-
-                if(inHouse.isSelected()) {
-                    newPart = new InHouse(
-                        partId,
-                        partName,
-                        partPrice,
-                        partMax,
-                        partMin,
-                        partMachineId
-                    );
-                } else {
-                    newPart = new Outsourced(
-                        partId,
-                        partName,
-                        partPrice,
-                        partMax,
-                        partMin,
-                        partType.getText()
-                    );
-                }
-
+                generatePart();
                 getInventory().addPart(newPart);
             }
         };
@@ -122,29 +107,10 @@ public class PartController extends AbstractController {
             @Override
             public void run() {
                 try {
-                    Part newPart = getInventory().lookupPart(partId);
+                    newPart = getInventory().lookupPart(partId);
+
                     getInventory().deletePart(newPart);
-
-                    if(inHouse.isSelected()) {
-                        newPart = new InHouse(
-                                partId,
-                                partName,
-                                partPrice,
-                                partMax,
-                                partMin,
-                                partMachineId
-                        );
-                    } else {
-                        newPart = new Outsourced(
-                                partId,
-                                partName,
-                                partPrice,
-                                partMax,
-                                partMin,
-                                partType.getText()
-                        );
-                    }
-
+                    generatePart();
                     getInventory().addPart(newPart);
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
@@ -159,18 +125,51 @@ public class PartController extends AbstractController {
         stage.close();
     }
 
-    private void setDefaultValues() throws Exception {
-        this.partId = this.getInventory().generatePartId();
-        this.partName = this.name.getText();
+    private void generatePart() {
+        if(inHouse.isSelected()) {
+            newPart = new InHouse(
+                    partId,
+                    partName,
+                    partPrice,
+                    partMax,
+                    partMin,
+                    partInventory,
+                    partMachineId
+            );
+        } else {
+            newPart = new Outsourced(
+                    partId,
+                    partName,
+                    partPrice,
+                    partMax,
+                    partMin,
+                    partInventory,
+                    partType.getText()
+            );
+        }
+    }
 
-        this.partPrice = this.validateDoubleValue(this.price.getText(), "Price");
-        this.partMax = this.validateIntegerValue(this.max.getText(), "Maximum");
-        this.partMin = this.validateIntegerValue(this.min.getText(), "Minimum");
+    private void setDefaultValues() throws Exception {
+        this.partId        = this.getInventory().generatePartId();
+
+        this.partName      = this.name.getText();
+        this.partPrice     = this.validateDoubleValue(this.price.getText(), "Price");
+        this.partMax       = this.validateIntegerValue(this.max.getText(), "Maximum");
+        this.partMin       = this.validateIntegerValue(this.min.getText(), "Minimum");
+        this.partInventory = this.validateIntegerValue(this.inventory.getText(), "Inventory");
 
         if(this.partMax <= this.partMin) {
             throw new Exception("The maximum can't not be less than the minimum");
         } else if(this.partMin < 0 || this.partMax < 0) {
             throw new Exception("The minimum or maximum can't be negative");
+        }
+
+        if(this.partInventory < this.partMin) {
+            throw new Exception("The inventory can't be less than the minimum");
+        }
+
+        if(this.partInventory > this.partMax) {
+            throw new Exception("The inventory can't be greater than the maximum");
         }
 
         if(this.inHouse.isSelected()) {

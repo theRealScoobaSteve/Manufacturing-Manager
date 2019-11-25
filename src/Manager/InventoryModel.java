@@ -11,11 +11,17 @@ public class InventoryModel {
     private ObservableList<Part> allParts;
     private ObservableList<Product> allProducts;
     private static InventoryModel instance;
+    private int lastPartId;
+    private int lastProductId;
 
     public InventoryModel() {
-        this.allParts = FXCollections.observableArrayList();
-        this.allParts = FXCollections.observableArrayList();
+        this.allParts      = FXCollections.observableArrayList();
+        this.allParts      = FXCollections.observableArrayList();
+        this.lastPartId    = 0;
+        this.lastProductId = 0;
     }
+
+
 
     public InventoryModel addPart(Part part) {
         allParts.add(part);
@@ -27,7 +33,7 @@ public class InventoryModel {
         return this;
     }
 
-    public Part lookupPart(int id) throws Exception {
+    public Part lookupPart(int id) {
         Iterator<Part> iterator = allParts.iterator();
 
         while(iterator.hasNext()) {
@@ -38,7 +44,7 @@ public class InventoryModel {
             }
         }
 
-        throw new Exception("Part with id: " + id + " does not exist");
+        throw null;
     }
 
     public Part lookupPart(String partName) {
@@ -111,20 +117,24 @@ public class InventoryModel {
         return allProducts;
     }
 
-    public int generatePartId() {
-        return this.allParts.size() + 1;
-    }
-
-    public int generateProductId() {
-        return this.allProducts.size() + 1;
-    }
-
     public int getPartStock() {
         return this.allParts.size();
     }
 
     public int getProductStock() {
         return this.allProducts.size();
+    }
+
+    public int getLastPartId() {
+        return lastPartId;
+    }
+
+    public int getLastProductId() {
+        return lastProductId;
+    }
+
+    public int generatePartId() {
+      return ++this.lastPartId;
     }
 
     public static InventoryModel getInstance() {

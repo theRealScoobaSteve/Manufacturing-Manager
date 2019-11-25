@@ -8,8 +8,9 @@ public class InHouse extends Part {
                    double price,
                    int min,
                    int max,
+                   int stock,
                    int machineId) {
-        super(id, name, price, min, max);
+        super(id, name, price, min, max, stock);
         this.machineId = machineId;
     }
 
