@@ -5,12 +5,15 @@ import Manager.Part.Part;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -29,6 +32,8 @@ public class MainController extends AbstractController {
     private TableColumn<Part, String> partInvLevel;
     @FXML
     private TableColumn<Part, String> partCost;
+    @FXML
+    private TextField partFilter;
 
     public void addPart() {
         try {
@@ -58,8 +63,11 @@ public class MainController extends AbstractController {
         }
     }
 
+    @FXML
     public void initialize() throws Exception {
         this.loadInitalData();
+        FilteredList<Part> filteredData = new FilteredList<>(this.getInventory().getAllParts(), p -> true);
+
         partId.setCellValueFactory(new PropertyValueFactory<>("id"));
         partName.setCellValueFactory(new PropertyValueFactory<>("name"));
         partInvLevel.setCellValueFactory(new PropertyValueFactory<>("stock"));
@@ -70,6 +78,37 @@ public class MainController extends AbstractController {
         partTable.getColumns().add(partName);
         partTable.getColumns().add(partInvLevel);
         partTable.getColumns().add(partCost);
+        partFilter.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredData.setPredicate(part -> {
+                // If filter text is empty, display all persons.
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+
+                // Compare first name and last name of every person with filter text.
+                String lowerCaseFilter = newValue.toLowerCase();
+
+                if (part.getName().toLowerCase().contains(lowerCaseFilter)) {
+                    return true; // Filter matches first name.
+                }
+
+                if(Double.toString(part.getPrice()).contains(lowerCaseFilter)) {
+                    return true;
+                }
+
+                if(Double.toString(part.getId()).contains(lowerCaseFilter)) {
+                    return true;
+                }
+                if(Double.toString(part.getStock()).contains(lowerCaseFilter)) {
+                    return true;
+                }
+
+                return false; // Does not match.
+            });
+        });
+        SortedList<Part> sortedData = new SortedList<>(filteredData);
+        sortedData.comparatorProperty().bind(this.partTable.comparatorProperty());
+        partTable.setItems(sortedData);
     }
 
     private void loadInitalData() throws Exception {
@@ -83,16 +122,21 @@ public class MainController extends AbstractController {
         this.getInventory().addPart(part1).addPart(part2).addPart(part3).addPart(part4).addPart(part5).addPart(part6);
     }
 
-    public void removePart() throws Exception {
+    /**
+     * @todo break this function down
+     * @throws Exception
+     */
+    @FXML
+    public void removePart() {
         try {
             Runnable task = new Runnable() {
-            @Override
-            public void run(){
-                Part part = partTable.getSelectionModel().getSelectedItem();
+                @Override
+                public void run(){
+                    Part part = partTable.getSelectionModel().getSelectedItem();
 
-                getInventory().deletePart(part);
-            }
-        };
+                    getInventory().deletePart(part);
+                }
+            };
 
             new Thread(task).start();
         } catch (Exception e) {

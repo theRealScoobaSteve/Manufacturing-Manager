@@ -29,7 +29,7 @@
                   <Insets left="175.0" top="37.0" />
                </HBox.margin>
             </Button>
-            <TextField minHeight="30.0" promptText="Search a part...">
+            <TextField minHeight="30.0" promptText="Search a part..." fx:id="partFilter">
                <HBox.margin>
                   <Insets left="20.0" top="37.0" />
                </HBox.margin>
