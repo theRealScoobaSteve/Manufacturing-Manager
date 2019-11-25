@@ -183,7 +183,7 @@
                   <Insets right="40.0" />
                </HBox.margin>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="75.0" text="Cancel" onAction="#exitWindow">
+            <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="75.0" text="Cancel" onAction="#exitAddPartWindow">
                <HBox.margin>
                   <Insets right="50.0" />
                </HBox.margin></Button>

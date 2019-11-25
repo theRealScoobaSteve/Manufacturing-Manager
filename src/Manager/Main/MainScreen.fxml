@@ -24,12 +24,12 @@
                   <Font size="27.0" />
                </font>
             </Label>
-            <Button minHeight="30.0" minWidth="70.0" mnemonicParsing="false" text="Search">
+            <Button minHeight="30.0" minWidth="70.0" mnemonicParsing="false" text="Filter" disable="true">
                <HBox.margin>
                   <Insets left="175.0" top="37.0" />
                </HBox.margin>
             </Button>
-            <TextField minHeight="30.0" promptText="Search a part..." fx:id="partFilter">
+            <TextField minHeight="30.0" promptText="Filter Parts" fx:id="partFilter">
                <HBox.margin>
                   <Insets left="20.0" top="37.0" />
                </HBox.margin>

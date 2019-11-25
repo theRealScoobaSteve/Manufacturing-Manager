@@ -27,6 +27,8 @@ public class PartController extends AbstractController {
     @FXML
     private Button saveButton;
     @FXML
+    private Button modifyButton;
+    @FXML
     private Label partTypeLabel;
     @FXML
     private TextField id;
@@ -51,6 +53,9 @@ public class PartController extends AbstractController {
 
     private int partInventory;
 
+    /**
+     * @todo break down
+     */
     @FXML
     public void addPart() {
         try {
@@ -66,10 +71,18 @@ public class PartController extends AbstractController {
     }
 
     @FXML
-    public void exitWindow() {
+    public void exitAddPartWindow() {
         this.closeAddPartScreen();
     }
 
+    @FXML
+    public void exitModifyPartWindow() {
+        this.closeModifyPartScreen();
+    }
+
+    /**
+     * @todo break down
+     */
     @FXML
     public void machineIdInput() {
         if(this.inHouse.isSelected()) {
@@ -81,6 +94,9 @@ public class PartController extends AbstractController {
         }
     }
 
+    /**
+     * @todo break down
+     */
     @FXML
     public void companyNameInput() {
         if(this.outSourced.isSelected()) {
@@ -120,8 +136,13 @@ public class PartController extends AbstractController {
         };
     }
 
-    private void closeAddPartScreen() throws RuntimeException {
+    private void closeAddPartScreen() {
         Stage stage = (Stage) this.saveButton.getScene().getWindow();
+        stage.close();
+    }
+
+    private void closeModifyPartScreen() {
+        Stage stage = (Stage) this.modifyButton.getScene().getWindow();
         stage.close();
     }
 
@@ -148,7 +169,6 @@ public class PartController extends AbstractController {
             );
         }
     }
-
     private void setDefaultValues() throws Exception {
         this.partId        = this.getInventory().generatePartId();
 
@@ -196,6 +216,12 @@ public class PartController extends AbstractController {
             System.out.println(e.getMessage());
             this.displayErrorScreen(e.getMessage());
         }
+    }
+
+    @FXML
+    public void setId(int id) {
+        this.partId = id;
+        this.id.setText(Integer.toString(id));
     }
 
 }

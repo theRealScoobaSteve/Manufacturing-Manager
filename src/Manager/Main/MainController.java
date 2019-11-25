@@ -2,24 +2,19 @@ package Manager.Main;
 
 import Manager.Part.InHouse;
 import Manager.Part.Part;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
+import Manager.Part.PartController;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import Manager.AbstractController;
-
-import java.util.Iterator;
 
 public class MainController extends AbstractController {
     @FXML
@@ -49,12 +44,19 @@ public class MainController extends AbstractController {
         }
     }
 
+    /**
+     * @todo create methods on abstract controller for creating a stage
+     */
     public void modifyPart() {
         try {
-            Stage stage       = new Stage();
-            FXMLLoader loader = new FXMLLoader();
-            Pane root         = loader.load(getClass().getResource("../Part/ModifyPart.fxml").openStream());
+            Stage stage               = new Stage();
+            FXMLLoader loader         = new FXMLLoader();
+            Pane root                 = loader.load(getClass().getResource("../Part/ModifyPart.fxml").openStream());
+            PartController controller = loader.getController();
 
+            Part part = partTable.getSelectionModel().getSelectedItem();
+
+            controller.setId(part.getId());
             stage.setScene(new Scene(root));
 
             stage.showAndWait();
@@ -63,6 +65,10 @@ public class MainController extends AbstractController {
         }
     }
 
+    /**
+     * @todo break this method down
+     * @throws Exception
+     */
     @FXML
     public void initialize() throws Exception {
         this.loadInitalData();
@@ -115,11 +121,8 @@ public class MainController extends AbstractController {
         InHouse part1 = new InHouse(this.getInventory().generatePartId(), "Part 1", 20.0, 5, 10, 6, 808);
         InHouse part2 = new InHouse(this.getInventory().generatePartId(), "Part 2", 20.0, 5, 10, 6, 808);
         InHouse part3 = new InHouse(this.getInventory().generatePartId(), "Part 3", 20.0, 5, 10, 6, 808);
-        InHouse part4 = new InHouse(this.getInventory().generatePartId(), "Part 4", 20.0, 5, 10, 6, 808);
-        InHouse part5 = new InHouse(this.getInventory().generatePartId(), "Part 5", 20.0, 5, 10, 6, 808);
-        InHouse part6 = new InHouse(this.getInventory().generatePartId(), "Part 6", 20.0, 5, 10, 6, 808);
 
-        this.getInventory().addPart(part1).addPart(part2).addPart(part3).addPart(part4).addPart(part5).addPart(part6);
+        this.getInventory().addPart(part1).addPart(part2).addPart(part3);
     }
 
     /**
