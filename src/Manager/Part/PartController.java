@@ -1,5 +1,6 @@
 package Manager.Part;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 
 import javafx.scene.control.Button;
@@ -53,17 +54,34 @@ public class PartController extends AbstractController {
 
     private int partInventory;
 
-    /**
-     * @todo break down
-     */
     @FXML
     public void addPart() {
         try {
             this.setDefaultValues();
-            Runnable task = this.createPartTask();
-            new Thread(task).start();
+            this.validateDefaultFields();
 
+            this.partId   = this.getInventory().generatePartId();
+            Runnable task = this.createPartTask();
+
+            new Thread(task).start();
             this.closeAddPartScreen();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            this.displayErrorScreen(e.getMessage());
+        }
+    }
+
+    @FXML
+    public void modifyPart() {
+        try {
+            this.setDefaultValues();
+            this.validateDefaultFields();
+
+            this.partId   = Integer.parseInt(this.id.getText());
+            Runnable task = this.modifyPartTask();
+
+            new Thread(task).start();
+            this.closeModifyPartScreen();
         } catch (Exception e) {
             System.out.println(e.getMessage());
             this.displayErrorScreen(e.getMessage());
@@ -80,9 +98,6 @@ public class PartController extends AbstractController {
         this.closeModifyPartScreen();
     }
 
-    /**
-     * @todo break down
-     */
     @FXML
     public void machineIdInput() {
         if(this.inHouse.isSelected()) {
@@ -94,9 +109,6 @@ public class PartController extends AbstractController {
         }
     }
 
-    /**
-     * @todo break down
-     */
     @FXML
     public void companyNameInput() {
         if(this.outSourced.isSelected()) {
@@ -123,11 +135,9 @@ public class PartController extends AbstractController {
             @Override
             public void run() {
                 try {
-                    newPart = getInventory().lookupPart(partId);
-
-                    getInventory().deletePart(newPart);
                     generatePart();
-                    getInventory().addPart(newPart);
+                    getInventory().updatePart(newPart);
+
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                     displayErrorScreen(e.getMessage());
@@ -169,15 +179,7 @@ public class PartController extends AbstractController {
             );
         }
     }
-    private void setDefaultValues() throws Exception {
-        this.partId        = this.getInventory().generatePartId();
-
-        this.partName      = this.name.getText();
-        this.partPrice     = this.validateDoubleValue(this.price.getText(), "Price");
-        this.partMax       = this.validateIntegerValue(this.max.getText(), "Maximum");
-        this.partMin       = this.validateIntegerValue(this.min.getText(), "Minimum");
-        this.partInventory = this.validateIntegerValue(this.inventory.getText(), "Inventory");
-
+    private void validateDefaultFields() throws Exception {
         if(this.partMax <= this.partMin) {
             throw new Exception("The maximum can't not be less than the minimum");
         } else if(this.partMin < 0 || this.partMax < 0) {
@@ -197,31 +199,32 @@ public class PartController extends AbstractController {
         }
     }
 
-    private void setId() throws Exception {
-        if(!this.id.isDisable()) {
-            this.partId = this.validateIntegerValue(this.id.getText(), "Part ID");
-        }
+    private void setDefaultValues() throws Exception {
+        this.partName      = this.name.getText();
+        this.partPrice     = this.validateDoubleValue(this.price.getText(), "Price");
+        this.partMax       = this.validateIntegerValue(this.max.getText(), "Maximum");
+        this.partMin       = this.validateIntegerValue(this.min.getText(), "Minimum");
+        this.partInventory = this.validateIntegerValue(this.inventory.getText(), "Inventory");
     }
 
-    @FXML
-    public void modifyPart() {
-        try {
-            this.setId();
-            this.setDefaultValues();
-            Runnable task = this.modifyPartTask();
-            new Thread(task).start();
-
-            this.closeAddPartScreen();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            this.displayErrorScreen(e.getMessage());
-        }
+    public void setPart(Part part) throws Exception {
+        this.newPart = part;
+        this.setTextFieldValues(part);
     }
 
-    @FXML
-    public void setId(int id) {
-        this.partId = id;
-        this.id.setText(Integer.toString(id));
+    private void setTextFieldValues(Part part) throws Exception {
+        this.id.setText(Integer.toString(part.getId()));
+        this.name.setText(part.getName());
+        this.price.setText(Double.toString(part.getPrice()));
+        this.inventory.setText(Integer.toString(part.getStock()));
+        this.min.setText(Integer.toString(part.getMin()));
+        this.max.setText(Integer.toString(part.getMax()));
+
+        if(part instanceof InHouse) {
+            this.partType.setText(Integer.toString(((InHouse) part).getMachineId()));
+        } else {
+            this.partType.setText(((Outsourced) part).getCompanyName());
+        }
     }
 
 }

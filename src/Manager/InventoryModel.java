@@ -62,9 +62,10 @@ public class InventoryModel {
     }
 
     public void updatePart(Part selectedPart) {
-        int id = allParts.indexOf(selectedPart);
+        Part oldPart = this.lookupPart(selectedPart.getId());
 
-        allParts.set(id, selectedPart);
+        int index = this.allParts.indexOf(oldPart);
+        allParts.set(index, selectedPart);
     }
 
     public void deletePart(Part selectedPart) {

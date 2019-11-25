@@ -22,7 +22,6 @@ public class Main extends Application {
         Parent root = loader.load(getClass().getResource("MainScreen.fxml").openStream());
         primaryStage.setTitle("Manager");
         primaryStage.setScene(new Scene(root, 1200, 500));
-//        ((MainController)loader.getController()).initialize();
 
         primaryStage.show();
     }

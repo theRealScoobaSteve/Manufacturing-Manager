@@ -1,6 +1,7 @@
 package Manager;
 
 import Manager.Error.ErrorController;
+import Manager.Part.PartController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;

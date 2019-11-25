@@ -102,7 +102,7 @@
                         <Insets left="125.0" />
                     </padding>
                 </Label>
-                <TextField disable="true" text="Inventory Level">
+                <TextField fx:id="inventory" text="Inventory Level">
                     <HBox.margin>
                         <Insets left="120.0" />
                     </HBox.margin></TextField>

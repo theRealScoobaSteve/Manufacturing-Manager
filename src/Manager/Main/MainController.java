@@ -44,9 +44,6 @@ public class MainController extends AbstractController {
         }
     }
 
-    /**
-     * @todo create methods on abstract controller for creating a stage
-     */
     public void modifyPart() {
         try {
             Stage stage               = new Stage();
@@ -55,8 +52,7 @@ public class MainController extends AbstractController {
             PartController controller = loader.getController();
 
             Part part = partTable.getSelectionModel().getSelectedItem();
-
-            controller.setId(part.getId());
+            controller.setPart(part);
             stage.setScene(new Scene(root));
 
             stage.showAndWait();
@@ -65,25 +61,39 @@ public class MainController extends AbstractController {
         }
     }
 
-    /**
-     * @todo break this method down
-     * @throws Exception
-     */
     @FXML
     public void initialize() throws Exception {
         this.loadInitalData();
         FilteredList<Part> filteredData = new FilteredList<>(this.getInventory().getAllParts(), p -> true);
+        SortedList<Part> sortedData     = new SortedList<>(filteredData);
 
+        this.setPartColumnHeaders();
+        this.addInventoryToTable();
+        this.addPartColumnsToTable();
+        this.addPartFilterListener(filteredData);
+        this.bindPropertyToTable(sortedData);
+    }
+
+    private void setPartColumnHeaders() {
         partId.setCellValueFactory(new PropertyValueFactory<>("id"));
         partName.setCellValueFactory(new PropertyValueFactory<>("name"));
         partInvLevel.setCellValueFactory(new PropertyValueFactory<>("stock"));
         partCost.setCellValueFactory(new PropertyValueFactory<>("price"));
-        partTable.getColumns().clear();
-        partTable.setItems(this.getInventory().getAllParts());
+    }
+
+    private void addPartColumnsToTable() {
         partTable.getColumns().add(partId);
         partTable.getColumns().add(partName);
         partTable.getColumns().add(partInvLevel);
         partTable.getColumns().add(partCost);
+    }
+
+    private void addInventoryToTable() {
+        partTable.getColumns().clear();
+        partTable.setItems(this.getInventory().getAllParts());
+    }
+
+    private void addPartFilterListener(FilteredList<Part> filteredData) {
         partFilter.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredData.setPredicate(part -> {
                 // If filter text is empty, display all persons.
@@ -112,7 +122,9 @@ public class MainController extends AbstractController {
                 return false; // Does not match.
             });
         });
-        SortedList<Part> sortedData = new SortedList<>(filteredData);
+    }
+
+    private void bindPropertyToTable(SortedList<Part> sortedData) {
         sortedData.comparatorProperty().bind(this.partTable.comparatorProperty());
         partTable.setItems(sortedData);
     }
@@ -125,10 +137,6 @@ public class MainController extends AbstractController {
         this.getInventory().addPart(part1).addPart(part2).addPart(part3);
     }
 
-    /**
-     * @todo break this function down
-     * @throws Exception
-     */
     @FXML
     public void removePart() {
         try {
