@@ -3,6 +3,7 @@ package Manager.Main;
 import Manager.Part.InHouse;
 import Manager.Part.Part;
 import Manager.Part.PartController;
+import javafx.beans.binding.Bindings;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
@@ -79,6 +80,7 @@ public class MainController extends AbstractController {
         partName.setCellValueFactory(new PropertyValueFactory<>("name"));
         partInvLevel.setCellValueFactory(new PropertyValueFactory<>("stock"));
         partCost.setCellValueFactory(new PropertyValueFactory<>("price"));
+        partCost.setCellValueFactory(cellData -> Bindings.format("%.2f", cellData.getValue().getPrice()));
     }
 
     private void addPartColumnsToTable() {
@@ -130,9 +132,9 @@ public class MainController extends AbstractController {
     }
 
     private void loadInitalData() throws Exception {
-        InHouse part1 = new InHouse(this.getInventory().generatePartId(), "Part 1", 20.0, 5, 10, 6, 808);
-        InHouse part2 = new InHouse(this.getInventory().generatePartId(), "Part 2", 20.0, 5, 10, 6, 808);
-        InHouse part3 = new InHouse(this.getInventory().generatePartId(), "Part 3", 20.0, 5, 10, 6, 808);
+        InHouse part1 = new InHouse(this.getInventory().generatePartId(), "Part 1", 499.99, 50, 500, 373, 304);
+        InHouse part2 = new InHouse(this.getInventory().generatePartId(), "Part 2", 36.39, 1000, 5000, 6, 808);
+        InHouse part3 = new InHouse(this.getInventory().generatePartId(), "Part 3", 243.6, 2000, 4000, 6, 206);
 
         this.getInventory().addPart(part1).addPart(part2).addPart(part3);
     }
