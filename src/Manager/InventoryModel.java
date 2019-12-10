@@ -16,20 +16,18 @@ public class InventoryModel {
 
     public InventoryModel() {
         this.allParts      = FXCollections.observableArrayList();
-        this.allParts      = FXCollections.observableArrayList();
+        this.allProducts   = FXCollections.observableArrayList();
         this.lastPartId    = 0;
         this.lastProductId = 0;
     }
 
-
-
     public InventoryModel addPart(Part part) {
-        allParts.add(part);
+        this.allParts.add(part);
         return this;
     }
 
     public InventoryModel addProduct (Product product) {
-        allProducts.add(product);
+        this.allProducts.add(product);
         return this;
     }
 
@@ -126,13 +124,7 @@ public class InventoryModel {
         return this.allProducts.size();
     }
 
-    public int getLastPartId() {
-        return lastPartId;
-    }
-
-    public int getLastProductId() {
-        return lastProductId;
-    }
+    public int generateProductId() { return ++this.lastProductId; };
 
     public int generatePartId() {
       return ++this.lastPartId;

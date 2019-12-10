@@ -179,6 +179,7 @@ public class PartController extends AbstractController {
             );
         }
     }
+
     private void validateDefaultFields() throws Exception {
         if(this.partMax <= this.partMin) {
             throw new Exception("The maximum can't not be less than the minimum");

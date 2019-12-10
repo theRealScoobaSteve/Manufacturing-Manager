@@ -1,5 +1,6 @@
 package Manager.Product;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import Manager.Part.Part;
 
@@ -13,13 +14,24 @@ public class Product {
 
     private ObservableList<Part> associatedParts;
 
+    public Product() {
+        this.id              = 0;
+        this.name            = "";
+        this.price           = 0;
+        this.stock           = 0;
+        this.min             = 0;
+        this.max             = 0;
+        this.associatedParts = FXCollections.observableArrayList();
+    }
+
     public Product(int id, String name, double price, int stock, int min, int max) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        this.stock = stock;
-        this.min = min;
-        this.max = max;
+        this.id              = id;
+        this.name            = name;
+        this.price           = price;
+        this.stock           = stock;
+        this.min             = min;
+        this.max             = max;
+        this.associatedParts = FXCollections.observableArrayList();
     }
 
     public int getId() {
@@ -71,9 +83,12 @@ public class Product {
         return associatedParts;
     }
 
-    public Product setAssociatedParts(ObservableList<Part> associatedParts) {
-        this.associatedParts = associatedParts;
-        return this;
+    public void addAssociatedPart(Part part) {
+        this.associatedParts.add(part);
+    }
+
+    public void removeAssociatedPart(Part part) {
+        this.associatedParts.remove(part);
     }
 
     public int getMax() {

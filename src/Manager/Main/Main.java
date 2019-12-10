@@ -6,7 +6,9 @@ import java.io.StringWriter;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.scene.Parent;
@@ -15,7 +17,6 @@ import javafx.stage.Stage;
 import Manager.Error.ErrorController;
 
 public class Main extends Application {
-
     @Override
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader();
