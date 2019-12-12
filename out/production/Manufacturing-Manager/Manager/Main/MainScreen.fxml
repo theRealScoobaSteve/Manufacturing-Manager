@@ -84,7 +84,7 @@
                   <Insets top="30.0" />
                </HBox.margin>
             </Label>
-            <Button minHeight="30.0" minWidth="70.0" mnemonicParsing="false" text="Search" disable="true">
+            <Button minHeight="30.0" minWidth="70.0" mnemonicParsing="false" text="Search">
                <HBox.margin>
                   <Insets left="155.0" top="37.0" />
                </HBox.margin>
