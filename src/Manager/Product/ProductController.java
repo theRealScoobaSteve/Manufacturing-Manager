@@ -70,7 +70,7 @@ public class ProductController extends AbstractController {
 
             this.productId = this.getInventory().generatePartId();
             Runnable task  = this.createProductTask();
-            System.out.println(newProduct.getStock());
+
             new Thread(task).start();
             this.closeAddProductScreen();
         } catch (Exception e) {
@@ -82,10 +82,7 @@ public class ProductController extends AbstractController {
     @FXML
     public void updateProduct() {
         try {
-            this.setDefaultValues();
             this.validateDefaultFields();
-
-            this.productId = Integer.parseInt(this.id.getText());
             Runnable task  = this.modifyProductTask();
 
             new Thread(task).start();
@@ -108,15 +105,20 @@ public class ProductController extends AbstractController {
         FilteredList<Part> filteredData = new FilteredList<>(this.getInventory().getAllParts(), p -> true);
         SortedList<Part> sortedData     = new SortedList<>(filteredData);
 
-        /**
-         * @todo need to separate associated part table and the part list and only set up the main part list here on load
-         */
-//        this.generateProduct();
-        this.setPartColumnHeaders();
-        this.addInventoryToTable();
-        this.addPartColumnsToTable();
+        this.generateProduct();
+
+        this.setAvailablePartColumns();
+        this.setAvailableInventoryToTable();
+        this.setAvailablePartColumnHeaders();
         this.addPartFilterListener(filteredData);
         this.bindPropertyToTable(sortedData);
+
+        if(this.name.getText() == "Product Name") {
+            System.out.println("HERE 2");
+            this.setAssociatedPartColumns();
+            this.setAssociatedInventoryToTable();
+            this.setAssociatedPartColumnHeaders();
+        }
     }
 
     private void setDefaultValues() throws Exception {
@@ -147,7 +149,6 @@ public class ProductController extends AbstractController {
         return new Runnable() {
             @Override
             public void run() {
-                generateProduct();
                 getInventory().addProduct(newProduct);
             }
         };
@@ -167,7 +168,6 @@ public class ProductController extends AbstractController {
             @Override
             public void run() {
                 try {
-                    setDefaultValues();
                     getInventory().updateProduct(newProduct);
 
                 } catch (Exception e) {
@@ -181,13 +181,6 @@ public class ProductController extends AbstractController {
     private void generateProduct() {
         if(this.newProduct == null) {
             this.newProduct = new Product();
-        } else {
-            this.productId        = this.newProduct.getId();
-            this.productMin       = this.newProduct.getMin();
-            this.productMax       = this.newProduct.getMax();
-            this.productInventory = this.newProduct.getStock();
-            this.productName      = this.newProduct.getName();
-            this.productPrice     = this.newProduct.getPrice();
         }
     }
 
@@ -205,12 +198,15 @@ public class ProductController extends AbstractController {
     /**
      * @todo need to separate associated part table and the part list
      */
-    private void setPartColumnHeaders() {
+    private void setAvailablePartColumns() {
         this.searchableId.setCellValueFactory(new PropertyValueFactory<>("id"));
         this.searchableName.setCellValueFactory(new PropertyValueFactory<>("name"));
         this.searchableInvLevel.setCellValueFactory(new PropertyValueFactory<>("stock"));
         this.searchableCost.setCellValueFactory(new PropertyValueFactory<>("price"));
         this.searchableCost.setCellValueFactory(cellData -> Bindings.format("%.2f", cellData.getValue().getPrice()));
+    }
+
+    private void setAssociatedPartColumns() {
         this.associatedId.setCellValueFactory(new PropertyValueFactory<>("id"));
         this.associatedName.setCellValueFactory(new PropertyValueFactory<>("name"));
         this.associatedInvLevel.setCellValueFactory(new PropertyValueFactory<>("stock"));
@@ -221,11 +217,14 @@ public class ProductController extends AbstractController {
     /**
      * @todo need to separate associated part table and the part list
      */
-    private void addPartColumnsToTable() {
+    private void setAvailablePartColumnHeaders() {
         this.searchableTable.getColumns().add(searchableId);
         this.searchableTable.getColumns().add(searchableName);
         this.searchableTable.getColumns().add(searchableInvLevel);
         this.searchableTable.getColumns().add(searchableCost);
+    }
+
+    private void setAssociatedPartColumnHeaders() {
         this.associatedPartTable.getColumns().add(associatedId);
         this.associatedPartTable.getColumns().add(associatedName);
         this.associatedPartTable.getColumns().add(associatedInvLevel);
@@ -235,9 +234,12 @@ public class ProductController extends AbstractController {
     /**
      * @todo need to separate associated part table and the part list
      */
-    private void addInventoryToTable() {
+    private void setAvailableInventoryToTable() {
         this.searchableTable.getColumns().clear();
         this.searchableTable.setItems(this.getInventory().getAllParts());
+    }
+
+    private void setAssociatedInventoryToTable() {
         this.associatedPartTable.getColumns().clear();
         this.associatedPartTable.setItems(this.newProduct.getAssociatedParts());
     }
@@ -282,11 +284,14 @@ public class ProductController extends AbstractController {
         this.searchableTable.setItems(sortedData);
     }
 
+    @FXML
     public void addPartToProduct() throws Exception {
+
         Runnable task = this.createAddPartTask();
         new Thread(task).start();
     }
 
+    @FXML
     public void addPartToProductModify() throws Exception {
         Runnable task = this.createAddPartTask();
         new Thread(task).start();
@@ -303,21 +308,19 @@ public class ProductController extends AbstractController {
     }
 
     public void setProduct(Product product) throws Exception {
-        this.newProduct = product;
-
-        this.setFieldValues(product);
-        this.generateProduct();
-        this.setPartColumnHeaders();
-        this.addInventoryToTable();
-        this.addPartColumnsToTable();
+        this.newProduct = new Product(product);
+        this.setLocalValues(product);
+        this.setAssociatedPartColumns();
+        this.setAssociatedInventoryToTable();
+        this.setAssociatedPartColumnHeaders();
     }
 
-    private void setFieldValues(Product product)  {
-        this.id.setText(Integer.toString(product.getId()));
-        this.name.setText(product.getName());
-        this.price.setText(Double.toString(product.getPrice()));
-        this.min.setText(Integer.toString(product.getMin()));
-        this.max.setText(Integer.toString(product.getMax()));
-        this.inventory.setText(Integer.toString(product.getStock()));
+    private void setLocalValues(Product product) {
+        this.productId        = product.getId();
+        this.productName      = product.getName();
+        this.productPrice     = product.getPrice();
+        this.productInventory = product.getStock();
+        this.productMin       = product.getMin();
+        this.productMax       = product.getMax();
     }
 }

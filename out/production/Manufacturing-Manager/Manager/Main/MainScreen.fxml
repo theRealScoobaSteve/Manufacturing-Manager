@@ -24,7 +24,7 @@
                   <Font size="27.0" />
                </font>
             </Label>
-            <Button minHeight="30.0" minWidth="70.0" mnemonicParsing="false" text="Filter" disable="true">
+            <Button minHeight="30.0" minWidth="70.0" mnemonicParsing="false" text="Search">
                <HBox.margin>
                   <Insets left="175.0" top="37.0" />
                </HBox.margin>
@@ -84,12 +84,12 @@
                   <Insets top="30.0" />
                </HBox.margin>
             </Label>
-            <Button minHeight="30.0" minWidth="70.0" mnemonicParsing="false" text="Search">
+            <Button minHeight="30.0" minWidth="70.0" mnemonicParsing="false" text="Search" disable="true">
                <HBox.margin>
                   <Insets left="155.0" top="37.0" />
                </HBox.margin>
             </Button>
-            <TextField minHeight="30.0">
+            <TextField minHeight="30.0" promptText="Filter Products" fx:id="productFilter">
                <HBox.margin>
                   <Insets left="20.0" top="37.0" />
                </HBox.margin>

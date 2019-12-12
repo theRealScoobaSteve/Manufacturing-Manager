@@ -37,6 +37,8 @@ public class MainController extends AbstractController {
     @FXML
     private TextField partFilter;
     @FXML
+    private TextField productFilter;
+    @FXML
     private TableView<Product> productTable;
     @FXML
     private TableColumn<Product, String> productId;
@@ -46,8 +48,6 @@ public class MainController extends AbstractController {
     private TableColumn<Product, String> productInvLevel;
     @FXML
     private TableColumn<Product, String> productCost;
-    @FXML
-    private TextField productFilter;
 
     @FXML
     public void addPart() {
@@ -138,14 +138,18 @@ public class MainController extends AbstractController {
     public void initialize() throws Exception {
         this.loadInitalData();
         exitBtn.setOnAction(e -> Platform.exit());
-        FilteredList<Part> filteredData = new FilteredList<>(this.getInventory().getAllParts(), p -> true);
-        SortedList<Part> sortedData     = new SortedList<>(filteredData);
+        FilteredList<Part> filteredPartData       = new FilteredList<>(this.getInventory().getAllParts(), p -> true);
+        SortedList<Part> sortedPartData           = new SortedList<>(filteredPartData);
+        FilteredList<Product> filteredProductData = new FilteredList<>(this.getInventory().getAllProducts(), p -> true);
+        SortedList<Product> sortedProductData     = new SortedList<>(filteredProductData);
 
         this.setPartColumnHeaders();
         this.addInventoryToTable();
         this.addPartColumnsToTable();
-        this.addPartFilterListener(filteredData);
-        this.bindPropertyToTable(sortedData);
+        this.addPartFilterListener(filteredPartData);
+        this.bindPartPropertyToTable(sortedPartData);
+        this.addProductFilterListener(filteredProductData);
+        this.bindProductPropertyToTable(sortedProductData);
     }
 
     private void setPartColumnHeaders() {
@@ -210,9 +214,45 @@ public class MainController extends AbstractController {
         });
     }
 
-    private void bindPropertyToTable(SortedList<Part> sortedData) {
+    private void addProductFilterListener(FilteredList<Product> filteredData) {
+        productFilter.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredData.setPredicate(part -> {
+                // If filter text is empty, display all persons.
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+
+                // Compare first name and last name of every person with filter text.
+                String lowerCaseFilter = newValue.toLowerCase();
+
+                if (part.getName().toLowerCase().contains(lowerCaseFilter)) {
+                    return true; // Filter matches first name.
+                }
+
+                if(Double.toString(part.getPrice()).contains(lowerCaseFilter)) {
+                    return true;
+                }
+
+                if(Double.toString(part.getId()).contains(lowerCaseFilter)) {
+                    return true;
+                }
+                if(Double.toString(part.getStock()).contains(lowerCaseFilter)) {
+                    return true;
+                }
+
+                return false; // Does not match.
+            });
+        });
+    }
+
+    private void bindPartPropertyToTable(SortedList<Part> sortedData) {
         sortedData.comparatorProperty().bind(this.partTable.comparatorProperty());
         partTable.setItems(sortedData);
+    }
+
+    private void bindProductPropertyToTable(SortedList<Product> sortedData) {
+        sortedData.comparatorProperty().bind(this.productTable.comparatorProperty());
+        productTable.setItems(sortedData);
     }
 
     private void loadInitalData() throws Exception {
@@ -222,9 +262,9 @@ public class MainController extends AbstractController {
 
         this.getInventory().addPart(part1).addPart(part2).addPart(part3);
 
-        Product product1 = new Product(this.getInventory().generateProductId(), "Product 1", 499.99, 50, 500, 373);
-        Product product2 = new Product(this.getInventory().generateProductId(), "Product 2", 36.39, 1000, 5000, 6);
-        Product product3 = new Product(this.getInventory().generateProductId(), "Product 3", 243.6, 2000, 4000, 3000);
+        Product product1 = new Product(this.getInventory().generateProductId(), "Product 1", 499.99, 50, 1, 373);
+        Product product2 = new Product(this.getInventory().generateProductId(), "Product 2", 36.39, 1000, 6, 5000);
+        Product product3 = new Product(this.getInventory().generateProductId(), "Product 3", 243.6, 2000, 3000, 4000);
 
         product1.addAssociatedPart(part1);
 
