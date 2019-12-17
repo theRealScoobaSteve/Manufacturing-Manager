@@ -8,30 +8,18 @@ import Manager.Product.Product;
 import java.util.Iterator;
 
 public class InventoryModel {
-    private ObservableList<Part> allParts;
-    private ObservableList<Product> allProducts;
-    private static InventoryModel instance;
-    private int lastPartId;
-    private int lastProductId;
+    private static ObservableList<Part> allParts = FXCollections.observableArrayList();
+    private static ObservableList<Product> allProducts = FXCollections.observableArrayList();
 
-    public InventoryModel() {
-        this.allParts      = FXCollections.observableArrayList();
-        this.allProducts   = FXCollections.observableArrayList();
-        this.lastPartId    = 0;
-        this.lastProductId = 0;
+    public static void addPart(Part part) {
+        allParts.add(part);
     }
 
-    public InventoryModel addPart(Part part) {
-        this.allParts.add(part);
-        return this;
+    public static void addProduct (Product product) {
+        allProducts.add(product);
     }
 
-    public InventoryModel addProduct (Product product) {
-        this.allProducts.add(product);
-        return this;
-    }
-
-    public Part lookupPart(int id) {
+    public static Part lookupPart(int id) {
         Iterator<Part> iterator = allParts.iterator();
 
         while(iterator.hasNext()) {
@@ -42,10 +30,10 @@ public class InventoryModel {
             }
         }
 
-        throw null;
+        return null;
     }
 
-    public Part lookupPart(String partName) {
+    public static Part lookupPart(String partName) {
         Iterator<Part> iterator = allParts.iterator();
 
         while(iterator.hasNext()) {
@@ -59,22 +47,22 @@ public class InventoryModel {
         return null;
     }
 
-    public void updatePart(Part selectedPart) {
-        Part oldPart = this.lookupPart(selectedPart.getId());
+    public static void updatePart(Part selectedPart) {
+        Part oldPart = lookupPart(selectedPart.getId());
 
-        int index = this.allParts.indexOf(oldPart);
+        int index = allParts.indexOf(oldPart);
         allParts.set(index, selectedPart);
     }
 
-    public void deletePart(Part selectedPart) {
+    public static void deletePart(Part selectedPart) {
         allParts.remove(selectedPart);
     }
 
-    public ObservableList<Part> getAllParts() {
+    public static ObservableList<Part> getAllParts() {
         return allParts;
     }
 
-    public Product lookupProduct(int id) {
+    public static Product lookupProduct(int id) {
         Iterator<Product> iterator = allProducts.iterator();
 
         while(iterator.hasNext()) {
@@ -88,7 +76,7 @@ public class InventoryModel {
         return null;
     }
 
-    public Product lookupProduct(String partName) {
+    public static Product lookupProduct(String partName) {
         Iterator<Product> iterator = allProducts.iterator();
 
         while(iterator.hasNext()) {
@@ -102,39 +90,18 @@ public class InventoryModel {
         return null;
     }
 
-    public void updateProduct(Product selectedProduct) {
-        int id = allProducts.indexOf(selectedProduct);
+    public static void updateProduct(Product selectedProduct) {
+        Product oldProduct = lookupProduct(selectedProduct.getId());
+        int id             = allProducts.indexOf(oldProduct);
 
         allProducts.set(id, selectedProduct);
     }
 
-    public void removeProduct(Product selectedProduct) {
+    public static void removeProduct(Product selectedProduct) {
         allProducts.remove(selectedProduct);
     }
 
-    public ObservableList<Product> getAllProducts() {
+    public static ObservableList<Product> getAllProducts() {
         return allProducts;
-    }
-
-    public int getPartStock() {
-        return this.allParts.size();
-    }
-
-    public int getProductStock() {
-        return this.allProducts.size();
-    }
-
-    public int generateProductId() { return ++this.lastProductId; };
-
-    public int generatePartId() {
-      return ++this.lastPartId;
-    }
-
-    public static InventoryModel getInstance() {
-        if(instance ==  null) {
-            instance = new InventoryModel();
-        }
-
-        return instance;
     }
 }

@@ -256,19 +256,23 @@ public class MainController extends AbstractController {
     }
 
     private void loadInitalData() throws Exception {
-        InHouse part1 = new InHouse(this.getInventory().generatePartId(), "Part 1", 499.99, 50, 500, 373, 304);
-        InHouse part2 = new InHouse(this.getInventory().generatePartId(), "Part 2", 36.39, 1000, 5000, 6, 808);
-        InHouse part3 = new InHouse(this.getInventory().generatePartId(), "Part 3", 243.6, 2000, 4000, 3000, 206);
+        InHouse part1 = new InHouse(0, "Part 1", 499.99, 50, 500, 373, 304);
+        InHouse part2 = new InHouse(1, "Part 2", 36.39, 1000, 5000, 6, 808);
+        InHouse part3 = new InHouse(2, "Part 3", 243.6, 2000, 4000, 3000, 206);
 
-        this.getInventory().addPart(part1).addPart(part2).addPart(part3);
+        this.getInventory().addPart(part1);
+        this.getInventory().addPart(part2);
+        this.getInventory().addPart(part3);
 
-        Product product1 = new Product(this.getInventory().generateProductId(), "Product 1", 499.99, 50, 1, 373);
-        Product product2 = new Product(this.getInventory().generateProductId(), "Product 2", 36.39, 1000, 6, 5000);
-        Product product3 = new Product(this.getInventory().generateProductId(), "Product 3", 243.6, 2000, 3000, 4000);
+        Product product1 = new Product(0, "Product 1", 499.99, 50, 1, 373);
+        Product product2 = new Product(1, "Product 2", 36.39, 1000, 6, 5000);
+        Product product3 = new Product(2, "Product 3", 243.6, 3500, 3000, 4000);
 
         product1.addAssociatedPart(part1);
 
-        this.getInventory().addProduct(product1).addProduct(product2).addProduct(product3);
+        this.getInventory().addProduct(product1);
+        this.getInventory().addProduct(product2);
+        this.getInventory().addProduct(product3);
     }
 
     @FXML

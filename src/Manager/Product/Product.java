@@ -109,4 +109,8 @@ public class Product {
         this.max = max;
         return this;
     }
+
+    public void setAssociatedParts(ObservableList<Part> associatedParts) {
+        this.associatedParts = associatedParts;
+    }
 }

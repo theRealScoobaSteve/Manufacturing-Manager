@@ -1,25 +1,21 @@
 package Manager;
 
 import Manager.Error.ErrorController;
-import Manager.Part.PartController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-
-import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.regex.Pattern;
 
 public abstract class AbstractController {
-    private InventoryModel inventory;
+    private static InventoryModel inventory;
 
     private final static String DOUBLE_PATTERN = "[0-9]+(\\.){0,1}[0-9]*";
 
     private final static String INTEGER_PATTERN = "\\d+";
 
     protected InventoryModel getInventory() {
-        return inventory.getInstance();
+        return inventory;
     }
 
     protected void displayErrorScreen(String text) {

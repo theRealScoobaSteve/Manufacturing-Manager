@@ -3,6 +3,8 @@ package Manager.Product;
 import Manager.AbstractController;
 import Manager.Part.Part;
 import javafx.beans.binding.Bindings;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
@@ -61,15 +63,22 @@ public class ProductController extends AbstractController {
     private int productInventory;
 
     private Product newProduct;
+    // Must hard code this in order to get around static inventory model
+    private int lastProductId = 2;
+
+    private ObservableList<Part> associatedParts = FXCollections.observableArrayList();
 
     @FXML
     public void addProduct() {
         try {
             this.setDefaultValues();
             this.validateDefaultFields();
+            this.productId = ++lastProductId;
 
-            this.productId = this.getInventory().generatePartId();
+            this.generateProduct();
             Runnable task  = this.createProductTask();
+            this.associatedParts = this.associatedPartTable.getSelectionModel().getTableView().getItems();
+            this.newProduct.setAssociatedParts(this.associatedParts);
 
             new Thread(task).start();
             this.closeAddProductScreen();
@@ -112,13 +121,9 @@ public class ProductController extends AbstractController {
         this.setAvailablePartColumnHeaders();
         this.addPartFilterListener(filteredData);
         this.bindPropertyToTable(sortedData);
-
-        if(this.name.getText() == "Product Name") {
-            System.out.println("HERE 2");
-            this.setAssociatedPartColumns();
-            this.setAssociatedInventoryToTable();
-            this.setAssociatedPartColumnHeaders();
-        }
+        this.setAssociatedPartColumns();
+        this.setAssociatedInventoryToTable();
+        this.setAssociatedPartColumnHeaders();
     }
 
     private void setDefaultValues() throws Exception {
@@ -132,7 +137,9 @@ public class ProductController extends AbstractController {
     private void validateDefaultFields() throws Exception {
         if(this.productMax <= this.productMin) {
             throw new Exception("The maximum can't not be less than the minimum");
-        } else if(this.productMin < 0 || this.productMax < 0) {
+        }
+
+        if(this.productMin < 0 || this.productMax < 0) {
             throw new Exception("The minimum or maximum can't be negative");
         }
 
@@ -171,6 +178,7 @@ public class ProductController extends AbstractController {
                     getInventory().updateProduct(newProduct);
 
                 } catch (Exception e) {
+                    System.out.println("HERE");
                     System.out.println(e.getMessage());
                     displayErrorScreen(e.getMessage());
                 }
@@ -179,8 +187,15 @@ public class ProductController extends AbstractController {
     }
 
     private void generateProduct() {
-        if(this.newProduct == null) {
-            this.newProduct = new Product();
+        if(this.associatedParts.isEmpty()) {
+            this.newProduct = new Product(
+                    this.productId,
+                    this.productName,
+                    this.productPrice,
+                    this.productInventory,
+                    this.productMin,
+                    this.productMax
+            );
         }
     }
 
@@ -286,7 +301,6 @@ public class ProductController extends AbstractController {
 
     @FXML
     public void addPartToProduct() throws Exception {
-
         Runnable task = this.createAddPartTask();
         new Thread(task).start();
     }
@@ -301,14 +315,20 @@ public class ProductController extends AbstractController {
         return new Runnable() {
             @Override
             public void run() {
-                Part part = searchableTable.getSelectionModel().getSelectedItem();
-                newProduct.addAssociatedPart(part);
+                try {
+                    Part part = searchableTable.getSelectionModel().getSelectedItem();
+                    newProduct.addAssociatedPart(part);
+                } catch(Exception e) {
+                    System.out.println(e.getMessage());
+                }
+
             }
         };
     }
 
     public void setProduct(Product product) throws Exception {
         this.newProduct = new Product(product);
+        System.out.println(newProduct.getAssociatedParts());
         this.setLocalValues(product);
         this.setAssociatedPartColumns();
         this.setAssociatedInventoryToTable();

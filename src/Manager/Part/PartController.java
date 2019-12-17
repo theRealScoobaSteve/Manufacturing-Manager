@@ -54,13 +54,16 @@ public class PartController extends AbstractController {
 
     private int partInventory;
 
+    // Must hard code this in order to get around static inventory model
+    private int lastPartId = 2;
+
     @FXML
     public void addPart() {
         try {
             this.setDefaultValues();
             this.validateDefaultFields();
 
-            this.partId   = this.getInventory().generatePartId();
+            this.partId   = ++lastPartId;
             Runnable task = this.createPartTask();
 
             new Thread(task).start();
@@ -183,7 +186,9 @@ public class PartController extends AbstractController {
     private void validateDefaultFields() throws Exception {
         if(this.partMax <= this.partMin) {
             throw new Exception("The maximum can't not be less than the minimum");
-        } else if(this.partMin < 0 || this.partMax < 0) {
+        }
+
+        if(this.partMin < 0 || this.partMax < 0) {
             throw new Exception("The minimum or maximum can't be negative");
         }
 
