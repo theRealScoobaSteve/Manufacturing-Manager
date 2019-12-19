@@ -14,6 +14,11 @@ public class Outsourced extends Part {
         this.companyName = companyName;
     }
 
+    public Outsourced() {
+        super(0, "", 0, 0, 0, 0);
+        this.companyName = "";
+    }
+
     public String getCompanyName() {
         return companyName;
     }

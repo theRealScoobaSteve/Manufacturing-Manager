@@ -50,18 +50,6 @@ public class ProductController extends AbstractController {
     @FXML
     private TableColumn<Part, String> associatedCost;
 
-    private String productName;
-
-    private double productPrice;
-
-    private int productMax;
-
-    private int productMin;
-
-    private int productId;
-
-    private int productInventory;
-
     private Product newProduct;
     // Must hard code this in order to get around static inventory model
     private int lastProductId = 2;
@@ -73,9 +61,7 @@ public class ProductController extends AbstractController {
         try {
             this.setDefaultValues();
             this.validateDefaultFields();
-            this.productId = ++lastProductId;
-
-            this.generateProduct();
+            this.newProduct.setId(++lastProductId);
             Runnable task  = this.createProductTask();
             this.associatedParts = this.associatedPartTable.getSelectionModel().getTableView().getItems();
             this.newProduct.setAssociatedParts(this.associatedParts);
@@ -91,8 +77,9 @@ public class ProductController extends AbstractController {
     @FXML
     public void updateProduct() {
         try {
+            this.setDefaultValues();
             this.validateDefaultFields();
-            Runnable task  = this.modifyProductTask();
+            Runnable task = this.modifyProductTask();
 
             new Thread(task).start();
             this.closeAddProductScreen();
@@ -114,8 +101,7 @@ public class ProductController extends AbstractController {
         FilteredList<Part> filteredData = new FilteredList<>(this.getInventory().getAllParts(), p -> true);
         SortedList<Part> sortedData     = new SortedList<>(filteredData);
 
-        this.generateProduct();
-
+        this.newProduct = new Product();
         this.setAvailablePartColumns();
         this.setAvailableInventoryToTable();
         this.setAvailablePartColumnHeaders();
@@ -127,27 +113,28 @@ public class ProductController extends AbstractController {
     }
 
     private void setDefaultValues() throws Exception {
-        this.productName      = this.name.getText();
-        this.productPrice     = this.validateDoubleValue(this.price.getText(), "Price");
-        this.productMax       = this.validateIntegerValue(this.max.getText(), "Maximum");
-        this.productMin       = this.validateIntegerValue(this.min.getText(), "Minimum");
-        this.productInventory = this.validateIntegerValue(this.inventory.getText(), "Inventory");
+        this.newProduct
+                .setName(this.name.getText())
+                .setPrice(this.validateDoubleValue(this.price.getText(), "Price"))
+                .setMax(this.validateIntegerValue(this.max.getText(), "Maximum"))
+                .setMin(this.validateIntegerValue(this.min.getText(), "Minimum"))
+                .setStock(this.validateIntegerValue(this.inventory.getText(), "Inventory"));
     }
 
     private void validateDefaultFields() throws Exception {
-        if(this.productMax <= this.productMin) {
+        if(this.newProduct.getMax() <= this.newProduct.getMin()) {
             throw new Exception("The maximum can't not be less than the minimum");
         }
 
-        if(this.productMin < 0 || this.productMax < 0) {
+        if(this.newProduct.getMin() < 0 || this.newProduct.getMax() < 0) {
             throw new Exception("The minimum or maximum can't be negative");
         }
 
-        if(this.productInventory < this.productMin) {
+        if(this.newProduct.getStock() < this.newProduct.getMin()) {
             throw new Exception("The inventory can't be less than the minimum");
         }
 
-        if(this.productInventory > this.productMax) {
+        if(this.newProduct.getStock() > this.newProduct.getMax()) {
             throw new Exception("The inventory can't be greater than the maximum");
         }
     }
@@ -178,25 +165,11 @@ public class ProductController extends AbstractController {
                     getInventory().updateProduct(newProduct);
 
                 } catch (Exception e) {
-                    System.out.println("HERE");
                     System.out.println(e.getMessage());
                     displayErrorScreen(e.getMessage());
                 }
             }
         };
-    }
-
-    private void generateProduct() {
-        if(this.associatedParts.isEmpty()) {
-            this.newProduct = new Product(
-                    this.productId,
-                    this.productName,
-                    this.productPrice,
-                    this.productInventory,
-                    this.productMin,
-                    this.productMax
-            );
-        }
     }
 
     @FXML
@@ -328,19 +301,19 @@ public class ProductController extends AbstractController {
 
     public void setProduct(Product product) throws Exception {
         this.newProduct = new Product(product);
-        System.out.println(newProduct.getAssociatedParts());
-        this.setLocalValues(product);
+
+        this.setTextFieldValues();
         this.setAssociatedPartColumns();
         this.setAssociatedInventoryToTable();
         this.setAssociatedPartColumnHeaders();
     }
 
-    private void setLocalValues(Product product) {
-        this.productId        = product.getId();
-        this.productName      = product.getName();
-        this.productPrice     = product.getPrice();
-        this.productInventory = product.getStock();
-        this.productMin       = product.getMin();
-        this.productMax       = product.getMax();
+    private void setTextFieldValues() {
+        this.id.setText(Integer.toString(this.newProduct.getId()));
+        this.name.setText(this.newProduct.getName());
+        this.price.setText(Double.toString(this.newProduct.getPrice()));
+        this.inventory.setText(Integer.toString(this.newProduct.getStock()));
+        this.min.setText(Integer.toString(this.newProduct.getMin()));
+        this.max.setText(Integer.toString(this.newProduct.getMax()));
     }
 }

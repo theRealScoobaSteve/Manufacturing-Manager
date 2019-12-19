@@ -41,6 +41,7 @@ public class Product {
         this.stock           = product.getStock();
         this.min             = product.getMin();
         this.max             = product.getMax();
+        this.associatedParts = FXCollections.observableArrayList();
         this.associatedParts = product.getAssociatedParts();
     }
 

@@ -36,23 +36,7 @@ public class PartController extends AbstractController {
     @FXML
     private TextField inventory;
 
-    private String partName;
-
-    private double partPrice;
-
-    private int partMax;
-
-    private int partMin;
-
-    private int partMachineId;
-
-    private String partCompanyName;
-
-    private int partId;
-
     private Part newPart;
-
-    private int partInventory;
 
     // Must hard code this in order to get around static inventory model
     private int lastPartId = 2;
@@ -60,10 +44,11 @@ public class PartController extends AbstractController {
     @FXML
     public void addPart() {
         try {
+            this.generatePart();
             this.setDefaultValues();
             this.validateDefaultFields();
 
-            this.partId   = ++lastPartId;
+            this.newPart.setId(++lastPartId);
             Runnable task = this.createPartTask();
 
             new Thread(task).start();
@@ -77,10 +62,11 @@ public class PartController extends AbstractController {
     @FXML
     public void modifyPart() {
         try {
+            this.generatePart();
             this.setDefaultValues();
             this.validateDefaultFields();
 
-            this.partId   = Integer.parseInt(this.id.getText());
+            this.newPart.setId(Integer.parseInt(this.id.getText()));
             Runnable task = this.modifyPartTask();
 
             new Thread(task).start();
@@ -127,7 +113,6 @@ public class PartController extends AbstractController {
         return new Runnable() {
             @Override
             public void run() {
-                generatePart();
                 getInventory().addPart(newPart);
             }
         };
@@ -138,7 +123,6 @@ public class PartController extends AbstractController {
             @Override
             public void run() {
                 try {
-                    generatePart();
                     getInventory().updatePart(newPart);
 
                 } catch (Exception e) {
@@ -161,56 +145,43 @@ public class PartController extends AbstractController {
 
     private void generatePart() {
         if(inHouse.isSelected()) {
-            newPart = new InHouse(
-                    partId,
-                    partName,
-                    partPrice,
-                    partMax,
-                    partMin,
-                    partInventory,
-                    partMachineId
-            );
+            newPart = new InHouse();
         } else {
-            newPart = new Outsourced(
-                    partId,
-                    partName,
-                    partPrice,
-                    partMax,
-                    partMin,
-                    partInventory,
-                    partType.getText()
-            );
+            newPart = new Outsourced();
         }
     }
 
     private void validateDefaultFields() throws Exception {
-        if(this.partMax <= this.partMin) {
+        if(this.newPart.getMax() <= this.newPart.getMin()) {
             throw new Exception("The maximum can't not be less than the minimum");
         }
 
-        if(this.partMin < 0 || this.partMax < 0) {
+        if(this.newPart.getMin() < 0 || this.newPart.getMax() < 0) {
             throw new Exception("The minimum or maximum can't be negative");
         }
 
-        if(this.partInventory < this.partMin) {
+        if(this.newPart.getStock() < this.newPart.getMin()) {
             throw new Exception("The inventory can't be less than the minimum");
         }
 
-        if(this.partInventory > this.partMax) {
+        if(this.newPart.getStock() > this.newPart.getMax()) {
             throw new Exception("The inventory can't be greater than the maximum");
-        }
-
-        if(this.inHouse.isSelected()) {
-            this.partMachineId = this.validateIntegerValue(this.partType.getText(), "Machine ID");
         }
     }
 
     private void setDefaultValues() throws Exception {
-        this.partName      = this.name.getText();
-        this.partPrice     = this.validateDoubleValue(this.price.getText(), "Price");
-        this.partMax       = this.validateIntegerValue(this.max.getText(), "Maximum");
-        this.partMin       = this.validateIntegerValue(this.min.getText(), "Minimum");
-        this.partInventory = this.validateIntegerValue(this.inventory.getText(), "Inventory");
+        this.newPart
+                .setName(this.name.getText())
+                .setPrice(this.validateDoubleValue(this.price.getText(), "Price"))
+                .setMax(this.validateIntegerValue(this.max.getText(), "Maximum"))
+                .setMin(this.validateIntegerValue(this.min.getText(), "Minimum"))
+                .setStock(this.validateIntegerValue(this.inventory.getText(), "Inventory"));
+
+        if(this.inHouse.isSelected()) {
+            ((InHouse) this.newPart).setMachineId(this.validateIntegerValue(this.partType.getText(), "Machine ID"));
+        } else {
+            ((Outsourced) this.newPart).setCompanyName(this.partType.getText());
+        }
     }
 
     public void setPart(Part part) throws Exception {
